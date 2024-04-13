@@ -1,5 +1,6 @@
 let data = JSON.parse(localStorage.getItem('data')) || []
 let count = 1
+let isValid;
 const table = document.querySelector('.productsList')
 const tableBody = document.querySelector('.tableBody')
 const arrowUp = document.querySelector('.growing-arrow')
@@ -18,7 +19,7 @@ document.querySelector('.burger').addEventListener('click', () => {
 
 
 // PRINT LIST
-function printList(array = data) {
+const printList = (array = data) => {
 	array.length > 0 ? table.classList.add('showTable') : table.classList.remove('showTable')
 	tableBody.innerHTML = ''
 
@@ -30,15 +31,15 @@ function printList(array = data) {
 		nameCell.classList.add('nameCell')
 		row.appendChild(nameCell)
 
-		const descriptionCell = document.createElement('td')
-		descriptionCell.classList.add('descriptionCell')
-		descriptionCell.innerHTML = array[i].description
-		row.appendChild(descriptionCell)
-
 		const priceCell = document.createElement('td')
 		priceCell.classList.add('priceCell')
 		priceCell.innerHTML = moneyFormat.format(array[i].price)
 		row.appendChild(priceCell)
+
+		const descriptionCell = document.createElement('td')
+		descriptionCell.classList.add('descriptionCell')
+		descriptionCell.innerHTML = array[i].description
+		row.appendChild(descriptionCell)
 
 		const buttonCell = document.createElement('td')
 		buttonCell.classList.add('buttonCell')
@@ -58,26 +59,43 @@ function printList(array = data) {
 }
 
 
+const displayError = (mensage, e) => {
+	isValid = false
+	alert(mensage)
+	e.preventDefault()
+}
+
 // ADD NEW ITEM
-document.querySelector('.addProduct').addEventListener('click', () => {
+document.querySelector('.addProduct').addEventListener('click', (event) => {
+	isValid = true
 	const text = document.querySelector('.text')
-	const description = document.querySelector('.description')
 	const price = document.querySelector('.price')
+	const description = document.querySelector('.description')
 
-	if (text.value === '' || price.value === '' || description.value === '') {
-		alert('Insira todas as informações.')
-	} else if (isNaN(price.value)) {		
-		alert('Insira o campo PREÇO corretamente.')
-	} else {
+	if (text.value === '') {
+		displayError('Preencha o campo "Nome do Produto".', event)
+	}
 
-		const product = { 
+	if (price.value === '') {
+		displayError('Preencha o campo "Preço do Produto".', event)
+	}
+
+	if (isNaN(price.value)) {
+		displayError('Preencha o campo "Preço do Produto" corretamente.', event)
+	}
+
+	if (description.value === '') {
+		displayError('Preencha o campo "Descrição do Produto".', event)
+	}
+
+	if (isValid === true) {
+		data.push({
 			id: data.length ? data.length + 1 : 1,
 			text: text.value,
 			description: description.value,
 			price: parseFloat(price.value.replace(',', '.'))
-		}
+		})
 
-		data.push(product)
 		localStorage.setItem('data', JSON.stringify(data))
 
 		text.innerHTML = ''
@@ -90,8 +108,7 @@ document.querySelector('.addProduct').addEventListener('click', () => {
 
 
 // FILTER BY NAME
-function filterByName() {
-
+const filterByName = () => {
 	printList(data.filter(produto => {
 		return produto.text.toLowerCase().includes(filterName.value.toLowerCase())
 	}))
@@ -101,8 +118,6 @@ function filterByName() {
 // ORDER LIST 
 document.querySelector('.filter').addEventListener('click', () => {
 	if (data.length >= 2) {
-		let filterSort = new Array
-		
 		if (count % 2 === 0) {
 			arrowUp.classList.add('showArrow')
 			arrowDown.classList.remove('showArrow')
