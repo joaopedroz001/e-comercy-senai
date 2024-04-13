@@ -17,28 +17,27 @@ document.querySelector('.burger').addEventListener('click', () => {
 })
 
 
-
 // PRINT LIST
 function printList(array = data) {
 	array.length > 0 ? table.classList.add('showTable') : table.classList.remove('showTable')
 	tableBody.innerHTML = ''
 
-	for (let i = 0; i < data.length; i++) {
+	for (let i = 0; i < array.length; i++) {
 		const row = document.createElement('tr')
 
 		const nameCell = document.createElement('td')
-		nameCell.innerHTML = data[i].text
+		nameCell.innerHTML = array[i].text
 		nameCell.classList.add('nameCell')
 		row.appendChild(nameCell)
 
 		const descriptionCell = document.createElement('td')
 		descriptionCell.classList.add('descriptionCell')
-		descriptionCell.innerHTML = data[i].description
+		descriptionCell.innerHTML = array[i].description
 		row.appendChild(descriptionCell)
 
 		const priceCell = document.createElement('td')
 		priceCell.classList.add('priceCell')
-		priceCell.innerHTML = moneyFormat.format(data[i].price)
+		priceCell.innerHTML = moneyFormat.format(array[i].price)
 		row.appendChild(priceCell)
 
 		const buttonCell = document.createElement('td')
@@ -47,16 +46,16 @@ function printList(array = data) {
 		const deleteButton = document.createElement('i')
 		deleteButton.className = 'fa-solid fa-trash deleteButton'
 		deleteButton.onclick = () => {
-			data.splice(i, 1)
-			localStorage.setItem('data', JSON.stringify(data))
+			array.splice(i, 1)
+			localStorage.setItem('data', JSON.stringify(array))
 			window.location.reload()
 		}
+
 		buttonCell.appendChild(deleteButton)
 		row.appendChild(buttonCell)
 		tableBody.appendChild(row) 
 	}
 }
-
 
 
 // ADD NEW ITEM
@@ -71,10 +70,8 @@ document.querySelector('.addProduct').addEventListener('click', () => {
 		alert('Insira o campo PREÇO corretamente.')
 	} else {
 
-		const nextID =  data.length ? data.length + 1 : 1		
-
 		const product = { 
-			id: nextID,
+			id: data.length ? data.length + 1 : 1,
 			text: text.value,
 			description: description.value,
 			price: parseFloat(price.value.replace(',', '.'))
@@ -94,20 +91,18 @@ document.querySelector('.addProduct').addEventListener('click', () => {
 
 // FILTER BY NAME
 function filterByName() {
-	count = 1
-	arrowUp.classList.add('showArrow')
-	arrowDown.classList.remove('showArrow')
 
-	printList(data.filter(
-			(product) => product.text.toLowerCase().includes(filterName.value.toLowerCase())
-		)
-	)
+	printList(data.filter(produto => {
+		return produto.text.toLowerCase().includes(filterName.value.toLowerCase())
+	}))
 }
 
 
 // ORDER LIST 
 document.querySelector('.filter').addEventListener('click', () => {
 	if (data.length >= 2) {
+		let filterSort = new Array
+		
 		if (count % 2 === 0) {
 			arrowUp.classList.add('showArrow')
 			arrowDown.classList.remove('showArrow')
@@ -121,6 +116,7 @@ document.querySelector('.filter').addEventListener('click', () => {
 		}
 		
 		count++
+		console.log(data)
 		filterName.value !== '' ? filterByName() : printList()
 	}
 })

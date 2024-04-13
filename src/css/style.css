@@ -65,6 +65,16 @@ main {
 	text-align: center;
 }
 
+.deleteButton {
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: color .3s;
+}
+
+.deleteButton:hover {
+	color: #4b4b4b;
+}
+
 .showArrow {
 	display: block !important;
 }
