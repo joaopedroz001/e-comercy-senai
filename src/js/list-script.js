@@ -1,39 +1,40 @@
 const printList = (array = data) => {
-	array.length > 0 ? table.classList.add('showTable') : table.classList.remove('showTable')
-	tableBody.innerHTML = ''
+	array.length > 0 ? cards.classList.add('showCards') : cards.classList.remove('showCards')
+	cards.innerHTML = ''
 
 	for (let i = 0; i < array.length; i++) {
-		const row = document.createElement('tr')
+    const col = document.createElement('div')
+    col.className = 'col-sm-6 mb-3'
 
-		const nameCell = document.createElement('td')
-		nameCell.innerHTML = array[i].text
-		nameCell.classList.add('nameCell')
-		row.appendChild(nameCell)
+    const card = document.createElement('div')
+    card.className = 'card h-100'
 
-		const priceCell = document.createElement('td')
-		priceCell.classList.add('priceCell')
-		priceCell.innerHTML = moneyFormat.format(array[i].price)
-		row.appendChild(priceCell)
+    const cardBody = document.createElement('div')
+    cardBody.className = 'card-body d-flex flex-column'
 
-		const descriptionCell = document.createElement('td')
-		descriptionCell.classList.add('descriptionCell')
-		descriptionCell.innerHTML = array[i].description
-		row.appendChild(descriptionCell)
+    const cardTitle = document.createElement('h5')
+    cardTitle.className = 'card-title'
+    cardTitle.innerHTML = `${array[i].text} - ${moneyFormat.format(array[i].price)}`
 
-		const buttonCell = document.createElement('td')
-		buttonCell.classList.add('buttonCell')
+    const cardText = document.createElement('p')
+    cardText.className = 'card-text'
+    cardText.innerHTML = array[i].description
 
-		const deleteButton = document.createElement('i')
-		deleteButton.className = 'fa-solid fa-trash deleteButton'
-		deleteButton.onclick = () => {
-			array.splice(i, 1)
+    const deleteButton = document.createElement('button')
+    deleteButton.className = 'btn btn-danger mt-auto fa-solid fa-trash deleteButton'
+    deleteButton.onclick = () => {
+      array.splice(i, 1)
 			localStorage.setItem('data', JSON.stringify(array))
 			window.location.reload()
-		}
+    }
 
-		buttonCell.appendChild(deleteButton)
-		row.appendChild(buttonCell)
-		tableBody.appendChild(row) 
+    cardBody.appendChild(cardTitle)
+    cardBody.appendChild(cardText)
+    cardBody.appendChild(deleteButton)
+
+    card.appendChild(cardBody)
+    col.appendChild(card)
+    cards.appendChild(col)
 	}
 }
 

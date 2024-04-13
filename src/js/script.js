@@ -1,8 +1,7 @@
 let data = JSON.parse(localStorage.getItem('data')) || []
 let count = 1
 let isValid;
-const table = document.querySelector('.productsList')
-const tableBody = document.querySelector('.tableBody')
+const cards = document.querySelector('.row')
 const arrowUp = document.querySelector('.growing-arrow')
 const arrowDown = document.querySelector('.descending-arrow')
 const filterName = document.querySelector('.nameFilterText')

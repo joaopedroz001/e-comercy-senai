@@ -53,26 +53,17 @@ main {
 	max-width: 500px !important;
 }
 
-.productsList {
-	display: none;
+.list-container {
+	max-width: 800px !important;
 }
 
-.showTable {
-	display: table !important;
-}
-
-.buttonCell {
-	text-align: center;
+.showCards {
+	display: flex !important;
 }
 
 .deleteButton {
+	width: 100%;
 	font-size: 1.5rem;
-	cursor: pointer;
-	transition: color .3s;
-}
-
-.deleteButton:hover {
-	color: #4b4b4b;
 }
 
 .showArrow {
