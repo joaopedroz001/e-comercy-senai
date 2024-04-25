@@ -1,4 +1,5 @@
 let data = JSON.parse(localStorage.getItem('data')) || []
+let db, text, description, price
 let count = 1
 let isValid;
 const cards = document.querySelector('.row')
